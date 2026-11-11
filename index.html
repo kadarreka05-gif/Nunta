@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Organizare Nuntă</title>
+<style>
+  :root {
+    --burgundy: #6d1a36;
+    --burgundy-dark: #4a0f24;
+    --burgundy-light: #f6e9ed;
+    --green: #3f6b4f;
+    --green-dark: #2c4d38;
+    --green-light: #e7f0ea;
+    --cream: #fbf7f2;
+    --text: #2b2025;
+    --gold: #c9a45c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    background: var(--cream);
+    color: var(--text);
+  }
+
+  /* ===== ANTET ===== */
+  header {
+    background: linear-gradient(135deg, var(--burgundy-dark), var(--burgundy));
+    color: #fff;
+    text-align: center;
+    padding: 30px 20px 26px;
+    border-bottom: 5px solid var(--green);
+    box-shadow: 0 4px 14px rgba(0,0,0,.2);
+  }
+  .title {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 3.2rem;
+    font-weight: normal;
+    letter-spacing: 2px;
+    color: #fff;
+    text-shadow: 0 2px 6px rgba(0,0,0,.35);
+  }
+  .title .amp {
+    color: var(--gold);
+    font-style: italic;
+    margin: 0 8px;
+  }
+  .date-row { margin-top: 14px; font-size: .95rem; }
+  .date-row input {
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.35);
+    border-radius: 6px;
+    color: #fff;
+    padding: 5px 8px;
+    margin-left: 6px;
+    color-scheme: dark;
+  }
+
+  /* ===== STATISTICI ===== */
+  .stats {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 18px 12px 0;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .stat {
+    background: #fff;
+    border-radius: 10px;
+    padding: 10px 18px;
+    text-align: center;
+    min-width: 120px;
+    border-top: 4px solid var(--green);
+    box-shadow: 0 2px 8px rgba(0,0,0,.07);
+  }
+  .stat.b { border-top-color: var(--burgundy); }
+  .stat .num { font-size: 1.6rem; font-weight: 700; color: var(--burgundy); }
+  .stat .lbl { font-size: .78rem; color: #6a5a60; text-transform: uppercase; letter-spacing: .5px; }
+
+  /* ===== LAYOUT ===== */
+  main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 18px 12px 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 850px) { main { grid-template-columns: 1fr; } }
+
+  .card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 3px 12px rgba(0,0,0,.08);
+  }
+  .card.guests { border-top: 5px solid var(--burgundy); }
+  .card.tables { border-top: 5px solid var(--green); }
+  .card h2 {
+    margin: 0 0 14px;
+    font-family: Georgia, serif;
+    font-size: 1.4rem;
+  }
+  .guests h2 { color: var(--burgundy); }
+  .tables h2 { color: var(--green-dark); }
+
+  /* ===== FORMULARE ===== */
+  .form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .form .full { grid-column: 1 / -1; }
+  input[type=text], input[type=number], input[type=tel], select {
+    width: 100%;
+    padding: 9px 10px;
+    border: 1px solid #d9ccd1;
+    border-radius: 8px;
+    font-size: .95rem;
+    background: #fff;
+    font-family: inherit;
+  }
+  input:focus, select:focus { outline: 2px solid var(--green); border-color: transparent; }
+  button {
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: .95rem;
+    font-weight: 600;
+    font-family: inherit;
+    transition: transform .08s, background .2s;
+  }
+  button:active { transform: scale(.97); }
+  .btn-burgundy { background: var(--burgundy); color: #fff; }
+  .btn-burgundy:hover { background: var(--burgundy-dark); }
+  .btn-green { background: var(--green); color: #fff; }
+  .btn-green:hover { background: var(--green-dark); }
+  .btn-x {
+    background: transparent;
+    color: #a33;
+    padding: 4px 8px;
+    font-size: 1.05rem;
+  }
+  .btn-x:hover { background: #fbe9e9; }
+
+  .search { margin-bottom: 10px; }
+
+  /* ===== LISTE ===== */
+  .list { max-height: 480px; overflow-y: auto; }
+  .guest-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: var(--burgundy-light);
+    margin-bottom: 8px;
+  }
+  .guest-name { font-weight: 600; }
+  .guest-meta { font-size: .8rem; color: #6a5a60; margin-top: 2px; }
+  .guest-actions { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .guest-actions select { width: auto; padding: 5px 6px; font-size: .82rem; }
+
+  .badge {
+    display: inline-block;
+    font-size: .72rem;
+    padding: 2px 8px;
+    border-radius: 20px;
+    color: #fff;
+    margin-left: 4px;
+  }
+  .badge.Invitat { background: #9a8a90; }
+  .badge.Confirmat { background: var(--green); }
+  .badge.Refuzat { background: #b34a4a; }
+
+  .table-box {
+    background: var(--green-light);
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    border-left: 5px solid var(--green);
+  }
+  .table-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+  .table-head strong { color: var(--green-dark); font-size: 1.05rem; }
+  .capacity { font-size: .82rem; color: #4a5f52; }
+  .capacity.full { color: #b34a4a; font-weight: 700; }
+  .bar {
+    height: 6px;
+    background: #cfdfd4;
+    border-radius: 4px;
+    margin: 8px 0;
+    overflow: hidden;
+  }
+  .bar > div { height: 100%; background: var(--green); }
+  .bar > div.over { background: #b34a4a; }
+  .seated {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0;
+    font-size: .9rem;
+    border-bottom: 1px dashed #bcd0c2;
+  }
+  .seated:last-child { border-bottom: none; }
+  .empty { color: #8a8a8a; font-style: italic; font-size: .88rem; }
+
+  .footer-actions {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 12px 30px;
+    text-align: center;
+  }
+  .btn-light { background: #e9e0e3; color: var(--text); }
+  .btn-light:hover { background: #ddd0d5; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1 class="title">Brigi <span class="amp">&amp;</span> Ionuț</h1>
+  <div class="date-row">
+    Data nunții: <input type="date" id="weddingDate">
+  </div>
+</header>
+
+<section class="stats">
+  <div class="stat b"><div class="num" id="stGuests">0</div><div class="lbl">Invitați (persoane)</div></div>
+  <div class="stat"><div class="num" id="stConfirmed">0</div><div class="lbl">Confirmați</div></div>
+  <div class="stat b"><div class="num" id="stTables">0</div><div class="lbl">Mese</div></div>
+  <div class="stat"><div class="num" id="stUnseated">0</div><div class="lbl">Fără masă</div></div>
+</section>
+
+<main>
+  <!-- ===== INVITAȚI ===== -->
+  <section class="card guests">
+    <h2>👥 Invitați</h2>
+    <div class="form">
+      <input type="text" id="gName" class="full" placeholder="Nume invitat / familie">
+      <input type="number" id="gCount" min="1" value="1" title="Număr persoane">
+      <select id="gStatus">
+        <option value="Invitat">Invitat</option>
+        <option value="Confirmat">Confirmat</option>
+        <option value="Refuzat">Refuzat</option>
+      </select>
+      <input type="tel" id="gPhone" class="full" placeholder="Telefon (opțional)">
+      <select id="gTable" class="full"></select>
+      <button class="btn-burgundy full" onclick="addGuest()">+ Adaugă invitat</button>
+    </div>
+    <input type="text" id="search" class="search" placeholder="🔍 Caută invitat..." oninput="render()">
+    <div class="list" id="guestList"></div>
+  </section>
+
+  <!-- ===== MESE ===== -->
+  <section class="card tables">
+    <h2>🍽️ Mese</h2>
+    <div class="form">
+      <input type="text" id="tName" placeholder="Nume masă (ex: Masa 1, Familia)">
+      <input type="number" id="tSeats" min="1" value="10" title="Număr locuri">
+      <button class="btn-green full" onclick="addTable()">+ Adaugă masă</button>
+    </div>
+    <div class="list" id="tableList"></div>
+  </section>
+</main>
+
+<div class="footer-actions">
+  <button class="btn-light" onclick="resetAll()">🗑️ Șterge toate datele</button>
+</div>
+
+<script>
+  var KEY = "nunta_app_v1";
+  var data = { bride: "Brigi", groom: "Ionut", date: "", guests: [], tables: [] };
+
+  function load() {
+    try {
+      var s = localStorage.getItem(KEY);
+      if (s) data = JSON.parse(s);
+    } catch (e) {}
+    if (!data.bride) data.bride = "Brigi";
+    if (!data.groom) data.groom = "Ionut";
+  }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(data)); } catch (e) {}
+  }
+  function esc(t) {
+    var d = document.createElement("div");
+    d.textContent = t == null ? "" : t;
+    return d.innerHTML;
+  }
+  function uid() { return Date.now() + Math.floor(Math.random() * 1000); }
+
+  /* ----- MIRI ----- */
+  document.getElementById("weddingDate").addEventListener("change", function () {
+    data.date = this.value; save();
+  });
+
+  /* ----- CALCULE ----- */
+  function seatedCount(tableId) {
+    var n = 0;
+    data.guests.forEach(function (g) {
+      if (g.tableId === tableId && g.status !== "Refuzat") n += g.count;
+    });
+    return n;
+  }
+
+  /* ----- MESE ----- */
+  function addTable() {
+    var name = document.getElementById("tName").value.trim();
+    var seats = parseInt(document.getElementById("tSeats").value, 10);
+    if (!name) { name = "Masa " + (data.tables.length + 1); }
+    if (!seats || seats < 1) { alert("Introdu un număr valid de locuri."); return; }
+    data.tables.push({ id: uid(), name: name, seats: seats });
+    document.getElementById("tName").value = "";
+    save(); render();
+  }
+  function deleteTable(id) {
+    if (!confirm("Ștergi masa? Invitații de la ea vor rămâne fără masă.")) return;
+    data.tables = data.tables.filter(function (t) { return t.id !== id; });
+    data.guests.forEach(function (g) { if (g.tableId === id) g.tableId = null; });
+    save(); render();
+  }
+
+  /* ----- INVITAȚI ----- */
+  function addGuest() {
+    var name = document.getElementById("gName").value.trim();
+    var count = parseInt(document.getElementById("gCount").value, 10) || 1;
+    var status = document.getElementById("gStatus").value;
+    var phone = document.getElementById("gPhone").value.trim();
+    var tv = document.getElementById("gTable").value;
+    var tableId = tv ? parseInt(tv, 10) : null;
+
+    if (!name) { alert("Scrie numele invitatului."); return; }
+    if (tableId && !fits(tableId, count, status, null)) return;
+
+    data.guests.push({ id: uid(), name: name, count: count, status: status, phone: phone, tableId: tableId });
+    document.getElementById("gName").value = "";
+    document.getElementById("gPhone").value = "";
+    document.getElementById("gCount").value = 1;
+    save(); render();
+  }
+  function fits(tableId, count, status, ignoreGuestId) {
+    if (status === "Refuzat") return true;
+    var t = data.tables.filter(function (x) { return x.id === tableId; })[0];
+    if (!t) return true;
+    var used = 0;
+    data.guests.forEach(function (g) {
+      if (g.tableId === tableId && g.id !== ignoreGuestId && g.status !== "Refuzat") used += g.count;
+    });
+    if (used + count > t.seats) {
+      return confirm("Masa „" + t.name + "” are doar " + (t.seats - used) +
+        " locuri libere. Adaugi oricum?");
+    }
+    return true;
+  }
+  function deleteGuest(id) {
+    data.guests = data.guests.filter(function (g) { return g.id !== id; });
+    save(); render();
+  }
+  function changeTable(id, value) {
+    var g = data.guests.filter(function (x) { return x.id === id; })[0];
+    var tid = value ? parseInt(value, 10) : null;
+    if (tid && !fits(tid, g.count, g.status, g.id)) { render(); return; }
+    g.tableId = tid;
+    save(); render();
+  }
+  function changeStatus(id, value) {
+    var g = data.guests.filter(function (x) { return x.id === id; })[0];
+    g.status = value;
+    save(); render();
+  }
+  function unseat(id) { changeTable(id, ""); }
+
+  function resetAll() {
+    if (!confirm("Sigur ștergi TOATE datele (invitați, mese, nume)?")) return;
+    data = { bride: "Brigi", groom: "Ionut", date: "", guests: [], tables: [] };
+    save(); init();
+  }
+
+  /* ----- AFIȘARE ----- */
+  function tableOptions(selected, firstLabel) {
+    var h = '<option value="">' + firstLabel + '</option>';
+    data.tables.forEach(function (t) {
+      var free = t.seats - seatedCount(t.id);
+      h += '<option value="' + t.id + '"' + (selected === t.id ? " selected" : "") + '>' +
+           esc(t.name) + ' (' + free + ' libere)</option>';
+    });
+    return h;
+  }
+
+  function render() {
+    /* statistici */
+    var total = 0, conf = 0, unseated = 0;
+    data.guests.forEach(function (g) {
+      if (g.status !== "Refuzat") {
+        total += g.count;
+        if (!g.tableId) unseated += g.count;
+      }
+      if (g.status === "Confirmat") conf += g.count;
+    });
+    document.getElementById("stGuests").textContent = total;
+    document.getElementById("stConfirmed").textContent = conf;
+    document.getElementById("stTables").textContent = data.tables.length;
+    document.getElementById("stUnseated").textContent = unseated;
+
+    /* select masă din formular */
+    var gt = document.getElementById("gTable");
+    var cur = gt.value;
+    gt.innerHTML = tableOptions(cur ? parseInt(cur, 10) : null, "— Fără masă (alege mai târziu) —");
+
+    /* lista invitați */
+    var q = document.getElementById("search").value.toLowerCase();
+    var gl = document.getElementById("guestList");
+    var gh = "";
+    data.guests.forEach(function (g) {
+      if (q && g.name.toLowerCase().indexOf(q) === -1) return;
+      gh += '<div class="guest-item">' +
+        '<div><div class="guest-name">' + esc(g.name) +
+        ' <span class="badge ' + g.status + '">' + g.status + '</span></div>' +
+        '<div class="guest-meta">' + g.count + (g.count === 1 ? " persoană" : " persoane") +
+        (g.phone ? " · 📞 " + esc(g.phone) : "") + '</div></div>' +
+        '<button class="btn-x" title="Șterge" onclick="deleteGuest(' + g.id + ')">✕</button>' +
+        '<div class="guest-actions" style="grid-column:1/-1">' +
+        '<select onchange="changeTable(' + g.id + ', this.value)">' +
+        tableOptions(g.tableId, "Fără masă") + '</select>' +
+        '<select onchange="changeStatus(' + g.id + ', this.value)">' +
+        ["Invitat", "Confirmat", "Refuzat"].map(function (s) {
+          return '<option' + (g.status === s ? " selected" : "") + '>' + s + '</option>';
+        }).join("") + '</select></div></div>';
+    });
+    gl.innerHTML = gh || '<div class="empty">Niciun invitat adăugat încă.</div>';
+
+    /* lista mese */
+    var tl = document.getElementById("tableList");
+    var th = "";
+    data.tables.forEach(function (t) {
+      var used = seatedCount(t.id);
+      var pct = Math.min(100, Math.round(used / t.seats * 100));
+      var over = used > t.seats;
+      var people = data.guests.filter(function (g) { return g.tableId === t.id; });
+      th += '<div class="table-box">' +
+        '<div class="table-head"><strong>' + esc(t.name) + '</strong>' +
+        '<span><span class="capacity' + (used >= t.seats ? " full" : "") + '">' +
+        used + ' / ' + t.seats + ' locuri</span> ' +
+        '<button class="btn-x" title="Șterge masa" onclick="deleteTable(' + t.id + ')">✕</button></span></div>' +
+        '<div class="bar"><div class="' + (over ? "over" : "") + '" style="width:' + pct + '%"></div></div>';
+      if (!people.length) {
+        th += '<div class="empty">Nimeni la această masă.</div>';
+      } else {
+        people.forEach(function (g) {
+          th += '<div class="seated"><span>' + esc(g.name) +
+            (g.count > 1 ? ' <small>(' + g.count + ')</small>' : '') +
+            (g.status === "Refuzat" ? ' <small>(refuzat)</small>' : '') + '</span>' +
+            '<button class="btn-x" title="Scoate de la masă" onclick="unseat(' + g.id + ')">↩</button></div>';
+        });
+      }
+      th += '</div>';
+    });
+    tl.innerHTML = th || '<div class="empty">Nicio masă adăugată încă.</div>';
+  }
+
+  function init() {
+    document.getElementById("weddingDate").value = data.date || "";
+    render();
+  }
+
+  load();
+  init();
+</script>
+</body>
+</html>
